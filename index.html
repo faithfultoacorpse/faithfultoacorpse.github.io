@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>faithful to a corpse</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Base styles */
+        :root {
+            --background: #0a0a0a;
+            --text: #d8d8d8;
+            --muted: #888888;
+            --accent: #5e0b15; /* Deep crimson */
+            --border: #333333;
+            --font-main: "Baskerville", "Libre Baskerville", Georgia, serif;
+            --font-mono: "Courier New", monospace;
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            font-family: var(--font-main);
+            line-height: 1.7;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: normal;
+            margin: 2rem 0 1rem;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            letter-spacing: 1px;
+            margin-top: 3rem;
+            text-align: center;
+            visibility: hidden; /* Hidden initially for character-by-character animation */
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            opacity: 0; /* Hidden initially for fade-in animation */
+            transition: opacity var(--transition-speed) ease;
+        }
+
+        a {
+            color: var(--text);
+            text-decoration: none;
+            border-bottom: 1px solid var(--muted);
+            transition: all var(--transition-speed) ease;
+        }
+
+        a:hover {
+            color: var(--accent);
+            border-bottom: 1px solid var(--accent);
+        }
+
+        blockquote {
+            border-left: 3px solid var(--accent);
+            padding-left: 1rem;
+            margin: 1.5rem 0;
+            font-style: italic;
+            color: var(--muted);
+        }
+
+        code {
+            font-family: var(--font-mono);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 2rem 0;
+        }
+
+        /* Layout */
+        header {
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: lowercase;
+        }
+
+        main {
+            padding-bottom: 4rem;
+            min-height: 70vh;
+        }
+
+        footer {
+            padding: 2rem 0;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        /* Page specific */
+        .logo {
+            font-size: 0.85rem;
+            color: var(--muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .page-title {
+            display: inline-block; /* For character animation */
+        }
+
+        /* Writings list */
+        .writings-list {
+            list-style-type: none;
+        }
+
+        .writing-item {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .writing-item:last-child {
+            border-bottom: none;
+        }
+
+        .writing-title {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .writing-meta {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .writing-excerpt {
+            font-size: 0.95rem;
+        }
+
+        /* Article page */
+        .article-header {
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .article-meta {
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        .article-content {
+            margin-bottom: 3rem;
+        }
+
+        .article-content img {
+            max-width: 100%;
+            height: auto;
+            margin: 2rem 0;
+            border: 1px solid var(--border);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+
+        /* Ornamental elements */
+        .ornament {
+            text-align: center;
+            margin: 2rem 0;
+            font-size: 1.5rem;
+            color: var(--muted);
+        }
+
+        /* About page */
+        .about-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--background);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
+        /* Character-by-character animation class */
+        .char {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(8px);
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes fadeInChar {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Animations for text on scroll */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">faithfultoacorpse</div>
+        <nav>
+            <a href="#" data-page="home" class="nav-link active">home</a>
+            <a href="#" data-page="writings" class="nav-link">writings</a>
+            <a href="#" data-page="about" class="nav-link">about</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Home Page -->
+        <section id="home" class="page active">
+            <h1 class="page-title">faithful to a corpse</h1>
+            
+            <div class="ornament">&#10043;</div>
+            
+            <div class="fade-in">
+                <p>In a time when "men were not alone," yet "knew not what to do," I collect thoughts among darkness visible.</p>
+                
+                <p>Here lie writings and reflections—gleaned from the twilight hours, when memory and imagination converge.</p>
+                
+                <blockquote>
+                    "The bright sun was extinguish'd, and the stars<br>
+                    Did wander darkling in the eternal space,<br>
+                    Rayless, and pathless, and the icy earth<br>
+                    Swung blind and blackening in the moonless air..."
+                    <br>— Lord Byron, <em>Darkness</em>
+                </blockquote>
+                
+                <p>Navigate through the archives to explore collected works, or <a href="#" class="page-link" data-page="about">learn more</a> about this repository.</p>
+                
+                <h2>Featured Writing</h2>
+                
+                <div class="writing-item">
+                    <h3 class="writing-title">The Silence Between Words</h3>
+                    <div class="writing-meta">February 26, 2025</div>
+                    <div class="writing-excerpt">
+                        <p>What remains unsaid often carries more weight than what is spoken. In the negative space between utterances, meaning emerges like shadows against twilight...</p>
+                        <a href="#" class="writing-link" data-article="sample-article">Continue reading →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Writings Page -->
+        <section id="writings" class="page">
+            <h1 class="page-title">collected writings</h1>
+            
+            <div class="ornament">&#10043;</div>
+            
+            <div class="fade-in">
+                <ul class="writings-list">
+                    <li class="writing-item">
+                        <h3 class="writing-title">The Silence Between Words</h3>
+                        <div class="writing-meta">February 26, 2025 · Reflections</div>
+                        <div class="writing-excerpt">
+                            <p>What remains unsaid often carries more weight than what is spoken. In the negative space between utterances, meaning emerges like shadows against twilight...</p>
+                            <a href="#" class="writing-link" data-article="sample-article">Continue reading →</a>
+                        </div>
+                    </li>
+                    <li class="writing-item">
+                        <h3 class="writing-title">Echoes of Forgotten Libraries</h3>
+                        <div class="writing-meta">February 20, 2025 · Essays</div>
+                        <div class="writing-excerpt">
+                            <p>The manuscripts we've lost to time speak volumes about what we value and what we discard. Consider the Library of Alexandria—not as it burned, but as it was assembled...</p>
+                            <a href="#" class="writing-link" data-article="sample-article">Continue reading →</a>
+                        </div>
+                    </li>
+                    <li class="writing-item">
+                        <h3 class="writing-title">Nocturnes for Digital Landscapes</h3>
+                        <div class="writing-meta">February 15, 2025 · Philosophy</div>
+                        <div class="writing-excerpt">
+                            <p>As we construct virtual worlds with increasing complexity, the distinction between creation and discovery blurs. Are we revealing what was always there, beneath formal logic?</p>
+                            <a href="#" class="writing-link" data-article="sample-article">Continue reading →</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- About Page -->
+        <section id="about" class="page">
+            <h1 class="page-title">about this archive</h1>
+            
+            <div class="ornament">&#10043;</div>
+            
+            <div class="about-content fade-in">
+                <p>This collection takes its name from Lord Byron's "Darkness," a poem composed during the "year without a summer" of 1816. The line "and men were faithful to a corpse" speaks to our tenuous relationship with memory, tradition, and the past.</p>
+                
+                <p>The writings collected here explore themes of impermanence, digital preservation, and the search for meaning in fragmentary knowledge.</p>
+                
+                <blockquote>
+                    "And men forgot their passions in the dread<br>
+                    Of this their desolation; and all hearts<br>
+                    Were chill'd into a selfish prayer for light..."
+                </blockquote>
+                
+                <p>The site's design embraces minimalism not merely as an aesthetic choice, but as a philosophical position—an acknowledgment that clarity emerges from reduction rather than accumulation.</p>
+                
+                <p>All content is maintained through GitHub Pages, allowing for version control and transparent revision history—a modern approach to preserving thought against digital entropy.</p>
+                
+                <p>For inquiries or correspondence: <br><a href="mailto:contact@example.com">contact@example.com</a></p>
+            </div>
+        </section>
+
+        <!-- Sample Article -->
+        <section id="sample-article" class="page article-page">
+            <article>
+                <div class="article-header">
+                    <h1 class="page-title">The Silence Between Words</h1>
+                    <div class="article-meta">February 26, 2025 · Reflections</div>
+                </div>
+                
+                <div class="article-content fade-in">
+                    <p>What remains unsaid often carries more weight than what is spoken. In the negative space between utterances, meaning emerges like shadows against twilight. We construct elaborate frameworks of language to convey thought, yet the most profound concepts frequently elude direct expression.</p>
+                    
+                    <p>Consider the Japanese concept of <em>ma</em>—the interval, gap, or pause that gives shape to the whole. In Western terms, we might compare it to the rests in music that are as essential to composition as the notes themselves. Without these deliberate absences, there is only noise.</p>
+                    
+                    <div class="ornament">&#10043;</div>
+                    
+                    <h2>The Weight of Absence</h2>
+                    
+                    <p>In literature, what remains unwritten often resonates with greater significance than explicit description. Hemingway's iceberg theory suggests that the dignity of narrative movement is measured not in what appears on the surface, but in what lurks beneath—the seven-eighths invisible to casual observation.</p>
+                    
+                    <p>Digital communication has paradoxically amplified both our capacity for expression and our awareness of its limitations. We send messages across continents in milliseconds, yet struggle to convey the simplest emotions without recourse to pictographic shorthand. The more we speak, the more acutely we feel the inadequacy of our words.</p>
+                    
+                    <blockquote>
+                        "The rest is silence." — Hamlet's final words
+                    </blockquote>
+                    
+                    <p>Perhaps there is wisdom in embracing these limitations rather than struggling against them. To acknowledge the silence is not to surrender to it, but to recognize it as the necessary counterpart to speech—the darkness that gives definition to light.</p>
+                    
+                    <div class="ornament">&#10043;</div>
+                    
+                    <h2>Articulating the Ineffable</h2>
+                    
+                    <p>If language fails us in expressing the deepest truths, what remains? Some turn to mathematics, others to music or visual art. Each offers its own vocabulary for aspects of experience that resist conventional description. Yet even these alternative languages eventually encounter their own boundaries.</p>
+                    
+                    <p>The mystic traditions across cultures share a common insight: that ultimate understanding may require not more sophisticated language, but the willingness to move beyond language entirely. The Tao that can be told is not the eternal Tao; the name that can be named is not the eternal name.</p>
+                    
+                    <p>This is not an argument for obscurantism, but rather a recognition of necessary humility. The map is not the territory; the word is not the thing itself. Between our descriptions of reality and reality itself, there always remains an unbridgeable gap—a silence that speaks volumes.</p>
+                    
+                    <div class="ornament">&#10043;</div>
+                    
+                    <p>And so we continue to write, to speak, to communicate—not because we expect to capture truth in its entirety, but because the attempt itself has value. We send our words like lanterns into the darkness, illuminating small portions of the landscape while acknowledging the vast night that surrounds them.</p>
+                    
+                    <p>In that acknowledgment, perhaps, lies wisdom.</p>
+                </div>
+                
+                <a href="#" class="back-link page-link" data-page="writings">← Back to writings</a>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        <div>faithfultoacorpse © 2025</div>
+        <div><a href="https://github.com/faithfultoacorpse" target="_blank"><i class="fab fa-github"></i></a></div>
+    </footer>
+
+    <script>
+        // Navigation
+        document.querySelectorAll('.nav-link, .page-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Get the target page
+                const pageName = this.getAttribute('data-page');
+                
+                // Update active navigation link
+                document.querySelectorAll('.nav-link').forEach(navLink => {
+                    if (navLink.getAttribute('data-page') === pageName) {
+                        navLink.classList.add('active');
+                    } else {
+                        navLink.classList.remove('active');
+                    }
+                });
+                
+                // Hide all pages and show the target page
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                document.getElementById(pageName).classList.add('active');
+                
+                // Animate the page title character by character
+                animatePageTitle();
+                
+                // Reset scroll position
+                window.scrollTo(0, 0);
+            });
+        });
+        
+        // Article links
+        document.querySelectorAll('.writing-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Get the target article
+                const articleId = this.getAttribute('data-article');
+                
+                // Hide all pages and show the target article
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                document.getElementById(articleId).classList.add('active');
+                
+                // Animate the page title character by character
+                animatePageTitle();
+                
+                // Reset scroll position
+                window.scrollTo(0, 0);
+            });
+        });
+        
+        // Character-by-character title animation
+        function animatePageTitle() {
+            const titles = document.querySelectorAll('.active .page-title');
+            
+            titles.forEach(title => {
+                // Reset the title
+                title.style.visibility = 'visible';
+                title.innerHTML = title.textContent.split('').map(char => {
+                    if (char === ' ') {
+                        return '<span class="char">&nbsp;</span>';
+                    }
+                    return `<span class="char">${char}</span>`;
+                }).join('');
+                
+                // Animate each character with a staggered delay
+                const chars = title.querySelectorAll('.char');
+                chars.forEach((char, index) => {
+                    char.style.animationName = 'fadeInChar';
+                    char.style.animationDuration = '0.6s';
+                    char.style.animationDelay = `${index * 50}ms`;
+                    char.style.animationTimingFunction = 'ease-out';
+                });
+            });
+        }
+        
+        // Scroll animation for paragraphs
+        function handleScrollAnimation() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            const windowHeight = window.innerHeight;
+            
+            fadeElements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const offset = 100; // When the element is 100px from the bottom of the viewport
+                
+                if (elementPosition < windowHeight - offset) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+        
+        // Initial animations
+        window.addEventListener('load', () => {
+            animatePageTitle();
+            handleScrollAnimation();
+        });
+        
+        // Scroll event for fade-in animations
+        window.addEventListener('scroll', handleScrollAnimation);
+    </script>
+</body>
+</html>
