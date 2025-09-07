@@ -12,7 +12,7 @@ function loadPage(page, updateNav = false) {
             const contentElement = document.getElementById('content');
             contentElement.innerHTML = html;
             
-            if (page === 'home' && !homeAnimationShown) {
+            if (page === 'pages/home' && !homeAnimationShown) {
                 homeAnimationShown = true;
                 contentElement.querySelectorAll('.fade-in, .ornament').forEach(el => {
                     el.style.opacity = '0';
@@ -184,5 +184,5 @@ document.getElementById('content').addEventListener('click', function(e) {
 });
 
 window.addEventListener('DOMContentLoaded', () => {
-    loadPage('home', true);
+    loadPage('pages/home', true);
 });
